@@ -1,0 +1,23 @@
+body {
+  margin: 12px;
+}
+
+h1 :link {
+  color: black;
+  text-decoration: none;
+}
+
+article {
+  border: solid 2px black;
+  padding: 12px;
+  margin-bottom: 12px;
+
+  h2 {
+    margin-top: 0;
+
+    :link {
+      color: black;
+      text-decoration: none;
+    }
+  }
+}
