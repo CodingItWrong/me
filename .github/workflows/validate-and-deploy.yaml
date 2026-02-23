@@ -26,11 +26,27 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install W3C Validator
+      - name: Install W3C HTML Validator
         run: npm install -g w3c-html-validator
 
       - name: Validate HTML
         run: npx html-validator index.html
+
+  validate-css:
+    runs-on: ubunut-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: 25
+
+      - name: Download W3C CSS Validator
+        run: curl https://github.com/w3c/css-validator/releases/latest/download/css-validator.jar -L -o css-validator.jar
+
+      - name: Validate CSS
+        run: java -jar css-validator.jar file://$(realpath styles.css)
 
   validate-a11y:
     runs-on: ubuntu-latest
@@ -53,6 +69,7 @@ jobs:
   deploy:
     needs:
       - validate-html
+      - validate-css
       - validate-a11y
     environment:
       name: github-pages
