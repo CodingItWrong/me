@@ -1,0 +1,67 @@
+name: Validate and Deploy
+on:
+  push:
+    branches:
+      - main
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  validate-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install W3C Validator
+        run: npm install -g w3c-html-validator
+
+      - name: Validate HTML
+        run: npx html-validator index.html
+
+  validate-a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install Axe CLI
+        run: npm install -g @axe-core/cli
+
+      - name: Install Headless Chrome
+        run: npx browser-driver-manager install chrome
+
+      - name: Validate A11y
+        run: axe file://$(realpath index.html)
+
+  deploy:
+    needs:
+      - validate-html
+      - validate-a11y
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
