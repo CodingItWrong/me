@@ -19,5 +19,11 @@ jobs:
       - name: Install W3C Validator
         run: npm install -g w3c-html-validator
 
+      - name: Install Axe CLI
+        run: npm install -g @axe-core/cli
+
       - name: Validate HTML
-        run: npx html-validator **/*.html
+        run: npx html-validator index.html
+
+      - name: Validate A11y
+        run: axe file://$(realpath index.html)
