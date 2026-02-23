@@ -17,7 +17,7 @@ jobs:
           node-version: 24
 
       - name: Install W3C Validator
-        run: npm install -G w3c-html-validator
+        run: npm install -g w3c-html-validator
 
       - name: Validate HTML
         run: npx html-validator **/*.html
