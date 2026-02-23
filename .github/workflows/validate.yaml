@@ -34,5 +34,8 @@ jobs:
       - name: Install Axe CLI
         run: npm install -g @axe-core/cli
 
+      - name: Install Headless Chrome
+        run: npx browser-driver-manager install chrome
+
       - name: Validate A11y
         run: axe file://$(realpath index.html)
