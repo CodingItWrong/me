@@ -33,7 +33,7 @@ jobs:
         run: npx html-validator index.html
 
   validate-css:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
